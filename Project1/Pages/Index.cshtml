@@ -4,17 +4,23 @@
     ViewData["Title"] = "Home page";
 }
 
-<form method="post">
-    <input type="text" asp-for="TwitterUserName" placeholder="type twitter user name" />
-    <button type="submit">submit</button>
-</form>
 
-<ul>
-    @foreach (var twitt in Model.Twitts.Data)
-    {
-        <li>@twitt.Id || @twitt.Text </li>
-}
-</ul>
 
-<a class=\"twitter-timeline\" href=\"https://twitter.com/TwitterDev\">Tweets by TwitterDev</a>\n
-<script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>
+<div class="center-column">
+
+    <div class="title"><h1>TwitterWebTracker</h1></div>
+
+    <form method="post">
+            <input type="text" asp-for="TwitterUserName" placeholder="type twitter user name" />
+            <button type="submit" class="btn-info">find</button>
+    </form>
+
+    <div class="todo-list">
+        @foreach (var twitt in Model.Twitts.Data)
+        {
+            <div class="item-row-v2">@twitt.Text</div>
+            <div class="item-date">@twitt.Created_at.</div>
+        }
+    </div>
+</div>
+

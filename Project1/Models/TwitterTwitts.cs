@@ -22,8 +22,11 @@ namespace Project1.Models
 
     public class Datum
     {
+        public DateTime Created_at { get; set; }
         public string Id { get; set; }
+        public bool Possibly_sensitive { get; set; }
         public string Text { get; set; }
     }
+
 
 }

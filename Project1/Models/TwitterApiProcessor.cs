@@ -60,7 +60,7 @@ namespace Project1
             }
             else
             {
-                url = $"https://api.twitter.com/2/users/{ User.Data.Id }/tweets?tweet.fields=id";
+                url = $"https://api.twitter.com/2/users/{ User.Data.Id }/tweets?tweet.fields=created_at,possibly_sensitive&max_results=15";
             }
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
@@ -76,7 +76,6 @@ namespace Project1
                     PropertyNameCaseInsensitive = true,
                 };
                 Twitts = await JsonSerializer.DeserializeAsync<TwitterTwitts>(responseStream, options);
-
             }
             else
             {
