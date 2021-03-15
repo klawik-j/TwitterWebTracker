@@ -22,7 +22,6 @@ namespace Project1.Pages
         }
         [BindProperty(SupportsGet = true)]
         public string TwitterUserName { get; set; }
-        public HttpClient Client { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Contex { get; set; }
 
@@ -30,32 +29,8 @@ namespace Project1.Pages
         {
             var Obj = new TwitterApiProcessor(_config, TwitterUserName);
             await Obj.GetUserID();
+            await Obj.GetUserTwitts();
             Contex = Obj.Contex;
-            /*
-            string url = "";
-            if (string.IsNullOrWhiteSpace(TwitterUserName))
-            {
-                url = "https://api.twitter.com/2/users/by/username/LanaRhoades";
-            }
-            else
-            {
-                url = $"https://api.twitter.com/2/users/by/username/{ TwitterUserName }";
-            }
-
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var Client = new HttpClient();
-            Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _config["Twitter:BearerToken"]);
-            var response = await Client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                Contex = await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                throw new Exception(response.ReasonPhrase);
-            }
-            */
         }
         public IActionResult OnPost()
         {
