@@ -1,0 +1,12 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<form method="post">
+    <input type="text" asp-for="TwitterUserName" placeholder="type twitter user name" />
+    <button type="submit">submit</button>
+</form>
+
+<h3>The Twitter user name is: @Model.TwitterUserName</h3>
