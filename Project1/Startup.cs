@@ -13,6 +13,7 @@ namespace Project1
 {
     public class Startup
     {
+        private string _bearerApiToken = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,6 +26,7 @@ namespace Project1
         {
             services.AddRazorPages();
             services.AddHttpClient();
+            _bearerApiToken = Configuration["Twitter:BearerToken"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
