@@ -14,6 +14,7 @@ namespace Project1
         private readonly IConfiguration _config;
         private readonly string _TwitterUserName;
         public TwitterUser User { get; set; }
+        public TwitterTwitts Twitts { get; set; }
         public string Contex;
         public TwitterApiProcessor(IConfiguration config, string TwitterUserName)
         {
@@ -69,8 +70,13 @@ namespace Project1
 
             if (response.IsSuccessStatusCode)
             {
-                Contex = await response.Content.ReadAsStringAsync();
-                
+                var responseStream = await response.Content.ReadAsStreamAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                Twitts = await JsonSerializer.DeserializeAsync<TwitterTwitts>(responseStream, options);
+
             }
             else
             {

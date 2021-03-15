@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Project1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +25,15 @@ namespace Project1.Pages
         public string TwitterUserName { get; set; }
         [BindProperty(SupportsGet = true)]
         public string Contex { get; set; }
+        public TwitterTwitts Twitts { get; set; }
 
         public async Task OnGet()
         {
             var Obj = new TwitterApiProcessor(_config, TwitterUserName);
             await Obj.GetUserID();
             await Obj.GetUserTwitts();
-            Contex = Obj.Contex;
+            Twitts = Obj.Twitts;
+          
         }
         public IActionResult OnPost()
         {

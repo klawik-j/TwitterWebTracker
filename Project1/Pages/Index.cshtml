@@ -9,4 +9,12 @@
     <button type="submit">submit</button>
 </form>
 
-<h3>The Twitter user name is: @Model.Contex</h3>
+<ul>
+    @foreach (var twitt in Model.Twitts.Data)
+    {
+        <li>@twitt.Id || @twitt.Text </li>
+}
+</ul>
+
+<a class=\"twitter-timeline\" href=\"https://twitter.com/TwitterDev\">Tweets by TwitterDev</a>\n
+<script async src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>
