@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Project1.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,50 +13,37 @@ namespace Project1.Pages
 {
     public class IndexModel : PageModel
     {
+        private readonly ILogger<TwitterApiProcessor> _loggerTwitterApiProcessor;
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _config;
 
-        public IndexModel(ILogger<IndexModel> logger, IConfiguration config)
+        public IndexModel(ILogger<IndexModel> logger, ILogger<TwitterApiProcessor> loggerTwitterApiProcessor, IConfiguration config)
         {
             _logger = logger;
+            _loggerTwitterApiProcessor = loggerTwitterApiProcessor;
             _config = config;
         }
         [BindProperty(SupportsGet = true)]
         public string TwitterUserName { get; set; }
-        public HttpClient Client { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public string Contex { get; set; }
+        public string Contex = null;
+        public TwitterTwitts Twitts = null;
+        public TwitterUser User = null;
 
         public async Task OnGet()
         {
-            var Obj = new TwitterApiProcessor(_config, TwitterUserName);
+            var Obj = new TwitterApiProcessor(_loggerTwitterApiProcessor, _config, TwitterUserName);
             await Obj.GetUserID();
-            Contex = Obj.Contex;
-            /*
-            string url = "";
-            if (string.IsNullOrWhiteSpace(TwitterUserName))
+            if (Obj.Contex == null && Obj.User.Data.Id != null)
             {
-                url = "https://api.twitter.com/2/users/by/username/LanaRhoades";
+                await Obj.GetUserTwitts();
+                Twitts = Obj.Twitts;
+                User = Obj.User;
             }
             else
             {
-                url = $"https://api.twitter.com/2/users/by/username/{ TwitterUserName }";
+                Contex = Obj.Contex;
             }
-
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            var Client = new HttpClient();
-            Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _config["Twitter:BearerToken"]);
-            var response = await Client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                Contex = await response.Content.ReadAsStringAsync();
-            }
-            else
-            {
-                throw new Exception(response.ReasonPhrase);
-            }
-            */
+          
         }
         public IActionResult OnPost()
         {

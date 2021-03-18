@@ -2,9 +2,9 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Provide sufficient contrast against white background */
@@ -58,14 +58,104 @@ html {
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+header {
+    background-color: #151515;
 }
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    background-color: #151515;
+}
+
+input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+
+.center-column {
+    width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #373737;
+    border-radius: 3px;
+    box-shadow: 6px 2px 30px 0px rgba(0,0,0,0.75);
+}
+
+.item-row {
+    background-color: #595959;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 16px;
+    box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+}
+
+.btn-info {
+    font-size: 25px;
+    width: 100%;
+}
+
+.title {
+    text-align: center;
+    color: #17a2b7;
+}
+
+.item-date {
+    background-color: #595959;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 0px;
+    padding: 20px;
+    padding-top: 0px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 16px;
+    text-align: right;
+}
+
+.item-row-v2 {
+    background-color: #595959;
+    margin-bottom: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+}
+
+.tweet-profile-picuture {
+    float: left;
+    padding:5px;
+}
+
+.tweet-text {
+    float:none;
+}
+
+.save-to-db {
+    float: left;
+}
+
+.date {
+    
+}
+
+.subrow{
+   clear:both;
 }

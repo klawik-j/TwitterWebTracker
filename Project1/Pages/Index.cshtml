@@ -4,9 +4,53 @@
     ViewData["Title"] = "Home page";
 }
 
-<form method="post">
-    <input type="text" asp-for="TwitterUserName" placeholder="type twitter user name" />
-    <button type="submit">submit</button>
-</form>
 
-<h3>The Twitter user name is: @Model.Contex</h3>
+
+<div class="center-column">
+
+    <div class="title"><h1>TwitterWebTracker</h1></div>
+
+    <form method="post">
+            <input type="text" asp-for="TwitterUserName" placeholder="type twitter user name" />
+            <button type="submit" class="btn-info">find</button>
+    </form>
+
+    <div class="todo-list">
+        @if (@Model.Contex == null)
+        {
+            if (@Model.User?.Data == null)
+            {
+                <div class="item-row">Wrong username</div>
+            }
+            else if (@Model.Twitts.Data != null)
+            {
+                @foreach (var twitt in Model.Twitts.Data)
+                {
+                    <div class="item-row">
+                        <div class="subrow">
+                            <div class="tweet-profile-picuture">
+                                <img src="@Model.User.Data.Profile_image_url" class="tweet-profile-picuture" />
+                                <p class="text-left">@twitt.Text</p>
+                            </div>
+                        </div>
+                        <div class="subrow">
+                            <div class="save-to-db"><button type="button" class="btn btn-outline-info">Save</button></div>
+                            <div class="date"><p class="text-right">@twitt.Created_at</p></div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="item-row">User has no twitts</div>
+            }
+
+        }
+        else
+        {
+            <div class="item-row">@Model.Contex</div>
+        }
+
+    </div>
+</div>
+
