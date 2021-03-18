@@ -16,11 +16,41 @@
     </form>
 
     <div class="todo-list">
-        @foreach (var twitt in Model.Twitts.Data)
+        @if (@Model.Contex == null)
         {
-            <div class="item-row-v2">@twitt.Text</div>
-            <div class="item-date">@twitt.Created_at.</div>
+            if (@Model.User?.Data == null)
+            {
+                <div class="item-row">Wrong username</div>
+            }
+            else if (@Model.Twitts.Data != null)
+            {
+                @foreach (var twitt in Model.Twitts.Data)
+                {
+                    <div class="item-row">
+                        <div class="subrow">
+                            <div class="tweet-profile-picuture">
+                                <img src="@Model.User.Data.Profile_image_url" class="tweet-profile-picuture" />
+                                <p class="text-left">@twitt.Text</p>
+                            </div>
+                        </div>
+                        <div class="subrow">
+                            <div class="save-to-db"><button type="button" class="btn btn-outline-info">Save</button></div>
+                            <div class="date"><p class="text-right">@twitt.Created_at</p></div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="item-row">User has no twitts</div>
+            }
+
         }
+        else
+        {
+            <div class="item-row">@Model.Contex</div>
+        }
+
     </div>
 </div>
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Project1.Models;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,14 @@ namespace Project1
     public class TwitterApiProcessor
     {
         private readonly IConfiguration _config;
+        private readonly ILogger<TwitterApiProcessor> _logger;
         private readonly string _TwitterUserName;
         public TwitterUser User { get; set; }
         public TwitterTwitts Twitts { get; set; }
         public string Contex;
-        public TwitterApiProcessor(IConfiguration config, string TwitterUserName)
+        public TwitterApiProcessor(ILogger<TwitterApiProcessor> logger, IConfiguration config, string TwitterUserName)
         {
+            _logger = logger;
             _config = config;
             _TwitterUserName = TwitterUserName;
         }
@@ -26,25 +29,41 @@ namespace Project1
             string url = "";
             if (string.IsNullOrWhiteSpace(_TwitterUserName))
             {
-                url = "https://api.twitter.com/2/users/by/username/LanaRhoades";
+                url = "https://api.twitter.com/2/users/by/username/LanaRhoades?user.fields=profile_image_url";
             }
             else
             {
-                url = $"https://api.twitter.com/2/users/by/username/{ _TwitterUserName }";
+                url = $"https://api.twitter.com/2/users/by/username/{ _TwitterUserName }?user.fields=profile_image_url";
             }
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             var Client = new HttpClient();
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _config["Twitter:BearerToken"]);
             var response = await Client.SendAsync(request);
+            _logger.LogInformation("GetUserId():ResponseCode: {response_code}", response.StatusCode);
 
             if (response.IsSuccessStatusCode)
             {
+                string data = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("response:{data}", data);
                 var responseStream = await response.Content.ReadAsStreamAsync();
                 var options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
                 };
                 User = await JsonSerializer.DeserializeAsync<TwitterUser>(responseStream, options);
+                _logger.LogInformation("{user}", User);
+                //Contex = await response.Content.ReadAsStringAsync();
+            }
+            else if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("errors in reponse json: {User.Errors}", response.StatusCode);
+                var responseStream = await response.Content.ReadAsStringAsync();
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                //Error = await JsonSerializer.DeserializeAsync<TwitterApiRequesError>(responseStream, options);
+                Contex = responseStream;
             }
             else
             {
@@ -67,6 +86,7 @@ namespace Project1
             var Client = new HttpClient();
             Client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _config["Twitter:BearerToken"]);
             var response = await Client.SendAsync(request);
+            _logger.LogInformation("response status code: {status_code}", response.StatusCode);
 
             if (response.IsSuccessStatusCode)
             {
@@ -79,6 +99,7 @@ namespace Project1
             }
             else
             {
+                
                 throw new Exception(response.ReasonPhrase);
             }
         }
