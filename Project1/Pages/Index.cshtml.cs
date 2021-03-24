@@ -14,40 +14,20 @@ namespace Project1.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<TwitterApiProcessor> _loggerTwitterApiProcessor;
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _config;
-        private readonly Projet1DataAccessLibrary.DataAccess.TwittContext _context;
 
-        public IndexModel(ILogger<IndexModel> logger, ILogger<TwitterApiProcessor> loggerTwitterApiProcessor, IConfiguration config, Projet1DataAccessLibrary.DataAccess.TwittContext context)
+        public IndexModel(ILogger<IndexModel> logger, IConfiguration config)
         {
             _logger = logger;
-            _loggerTwitterApiProcessor = loggerTwitterApiProcessor;
             _config = config;
-            _context = context;
         }
-        
+        [BindProperty(SupportsGet = true)]
         public string TwitterUserName { get; set; }
-        public string Contex = null;
-        public TwitterTwitts Twitts = null;
-        public TwitterUser User = null;
-        public DBTwitt DBTwitt { get; set; }
 
-        public async Task OnGet()
+        public void OnGet()
         {
-            var Obj = new TwitterApiProcessor(_loggerTwitterApiProcessor, _config, TwitterUserName);
-            await Obj.GetUserID();
-            if (Obj.Contex == null && Obj.User.Data.Id != null)
-            {
-                await Obj.GetUserTwitts();
-                Twitts = Obj.Twitts;
-                User = Obj.User;
-            }
-            else
-            {
-                Contex = Obj.Contex;
-            }
-          
+
         }
         public IActionResult OnPost()
         {
@@ -55,19 +35,7 @@ namespace Project1.Pages
             {
                 return Page();
             }
-            return RedirectToPage("/Index", new { TwitterUserName });
+            return RedirectToPage("/List", new { TwitterUserName });
         }
-        public async Task<IActionResult> OnPostCreateAsync( )
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-            _context.Twitt.Add(DBTwitt);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
-
     }
 }

@@ -1,0 +1,60 @@
+﻿@page
+@model Project1.Pages.ListModel
+@{
+}
+
+
+
+<div class="center-column">
+
+    <div class="title"><h1>TwitterWebTracker</h1></div>
+
+    <div class="todo-list">
+        @if (@Model.Contex == null)
+        {
+            if (@Model.User?.Data == null)
+            {
+                <div class="item-row">Wrong username</div>
+            }
+            else if (@Model.Twitts.Data != null)
+            {
+                @foreach (var twitt in Model.Twitts.Data)
+                {
+                    <div class="item-row">
+                        <div class="subrow">
+                            <div class="tweet-profile-picuture">
+                                <img src="@Model.User.Data.Profile_image_url" class="tweet-profile-picuture" />
+                                <p class="text-left">@twitt.Text</p>
+                            </div>
+                        </div>
+                        <div class="subrow">
+                            <div class="save-to-db">
+                                <form method="post" asp-page="List">
+                                    <input asp-for="DBTwitt.Id" type="hidden" name="Id" value="@twitt.Id" />
+                                    <input asp-for="DBTwitt.Text" type="hidden" name="Text" value="@twitt.Text" />
+                                    <input asp-for="DBTwitt.Author" type="hidden" name="Author" value="@Model.User.Data.Username" />
+                                    <input asp-for="DBTwitt.Profile_image_url" type="hidden" name="Profile_image_url" value="@Model.User.Data.Profile_image_url" />
+                                    <input asp-for="DBTwitt.Created_at" type="hidden" name="Created_at" value="@twitt.Created_at" />
+                                    <input asp-for="DBTwitt.Saved_at" type="hidden" name="Saved_at" value="@DateTime.Now" />
+                                    <input type="hidden" name="UserName" value="@Model.TwitterUserName" />
+                                    <button type="submit" class="btn btn-outline-info">Save</button>
+                                </form>
+                            </div>
+                            <div class="date"><p class="text-right">@twitt.Created_at</p></div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="item-row">User has no twitts</div>
+            }
+
+        }
+        else
+        {
+            <div class="item-row">@Model.Contex</div>
+        }
+
+    </div>
+</div>
