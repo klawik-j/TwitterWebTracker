@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Project1.Models;
+using Projet1DataAccessLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +17,21 @@ namespace Project1.Pages
         private readonly ILogger<TwitterApiProcessor> _loggerTwitterApiProcessor;
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _config;
+        private readonly Projet1DataAccessLibrary.DataAccess.TwittContext _context;
 
-        public IndexModel(ILogger<IndexModel> logger, ILogger<TwitterApiProcessor> loggerTwitterApiProcessor, IConfiguration config)
+        public IndexModel(ILogger<IndexModel> logger, ILogger<TwitterApiProcessor> loggerTwitterApiProcessor, IConfiguration config, Projet1DataAccessLibrary.DataAccess.TwittContext context)
         {
             _logger = logger;
             _loggerTwitterApiProcessor = loggerTwitterApiProcessor;
             _config = config;
+            _context = context;
         }
-        [BindProperty(SupportsGet = true)]
+        
         public string TwitterUserName { get; set; }
         public string Contex = null;
         public TwitterTwitts Twitts = null;
         public TwitterUser User = null;
+        public DBTwitt DBTwitt { get; set; }
 
         public async Task OnGet()
         {
@@ -53,5 +57,17 @@ namespace Project1.Pages
             }
             return RedirectToPage("/Index", new { TwitterUserName });
         }
+        public async Task<IActionResult> OnPostCreateAsync( )
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            _context.Twitt.Add(DBTwitt);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("./Index");
+        }
+
     }
 }

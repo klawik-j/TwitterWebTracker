@@ -1,0 +1,59 @@
+﻿@page
+@model Project1.Pages.testModel
+
+@{
+    ViewData["Title"] = "test";
+}
+
+<h1>test</h1>
+
+<h4>DBTwitt</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Id" class="control-label"></label>
+                <input asp-for="DBTwitt.Id" class="form-control" />
+                <span asp-validation-for="DBTwitt.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Text" class="control-label"></label>
+                <input asp-for="DBTwitt.Text" class="form-control" />
+                <span asp-validation-for="DBTwitt.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Author" class="control-label"></label>
+                <input asp-for="DBTwitt.Author" class="form-control" />
+                <span asp-validation-for="DBTwitt.Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Profile_image_url" class="control-label"></label>
+                <input asp-for="DBTwitt.Profile_image_url" class="form-control" />
+                <span asp-validation-for="DBTwitt.Profile_image_url" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Created_at" class="control-label"></label>
+                <input asp-for="DBTwitt.Created_at" class="form-control" />
+                <span asp-validation-for="DBTwitt.Created_at" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DBTwitt.Saved_at" class="control-label"></label>
+                <input asp-for="DBTwitt.Saved_at" class="form-control" />
+                <span asp-validation-for="DBTwitt.Saved_at" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

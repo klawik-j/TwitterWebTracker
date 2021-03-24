@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Projet1DataAccessLibrary.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,8 @@ namespace Project1
         {
             services.AddRazorPages();
             services.AddHttpClient();
+            services.AddDbContext<TwittContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("Default")));
             _bearerApiToken = Configuration["Twitter:BearerToken"];
         }
 
