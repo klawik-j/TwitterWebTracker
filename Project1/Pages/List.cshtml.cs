@@ -32,6 +32,7 @@ namespace Project1.Pages
         public TwitterUser User = null;
         [BindProperty]
         public DBTwitt DBTwitt { get; set; }
+        public List<string> ListOfTwittIdInDB { get; set; }
 
         public async Task OnGet()
         {
@@ -48,15 +49,33 @@ namespace Project1.Pages
             {
                 Contex = Obj.Contex;
             }
+            ListOfTwittIdInDB = _context.Twitt.Select(c => c.Id).ToList();
+            _logger.LogInformation("List:OnGet()::ListOfTwittIdInDB: {ListOfTwittIdInDB}", ListOfTwittIdInDB);
+        }
+        public void OnPost()
+        {
 
         }
-        public async Task<IActionResult> OnPost(string UserName)
+        public async Task<IActionResult> OnPostCreateAsync(string UserName)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
             _context.Twitt.Add(DBTwitt);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("List:OnPostCreateAsync():TwitterUserName: {TwitterUserName}", TwitterUserName);
+            TwitterUserName = UserName;
+            return RedirectToPage("/List", new { TwitterUserName });
+        }
+        public async Task<IActionResult> OnPostDeleteAsync(string UserName)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            _context.Twitt.Remove(DBTwitt);
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("List:OnPostCreateAsync():TwitterUserName: {TwitterUserName}", TwitterUserName);
