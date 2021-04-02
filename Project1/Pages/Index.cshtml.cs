@@ -6,6 +6,7 @@ using Project1.Models;
 using Projet1DataAccessLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace Project1.Pages
             _config = config;
         }
         [BindProperty(SupportsGet = true)]
+        [RegularExpression(@"^[A-Z]+[a-zA-Z]+[0-9]*$")]
+        [Required]
         public string TwitterUserName { get; set; }
 
         public void OnGet()
