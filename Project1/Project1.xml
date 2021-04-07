@@ -1,0 +1,301 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Project1</name>
+    </assembly>
+    <members>
+        <member name="T:Project1.TwitterApiProcessor">
+            <summary>
+            Klasa obslugujaca API Twittera. Zawiera metody niezbednedo do prawidlowego wysylania i odbierania zapytan o dane.
+            </summary>
+            
+            <item>
+            <term>_config</term>
+            <description>Zmnienna konfiguracyjna uzywana w celu obslugi secret'ow takich jak token API przechowywanych w pliku srodowiskowym,
+            bez koniecznosci ujawniania go bezposrednio w kodzie</description>
+            </item>
+            
+            <item>
+            <term>_logger</term>
+            <description>Zmienna uzyta w celu wykorzystania narzedzia logger w celu debugowania kodu podczas jego pisania i testowania</description>
+            </item>
+            
+            <item>
+            <term>_TwitterUserName</term>
+            <description>Zmienna bedaca nazwa uzytkowanika ktory podlega wyszukaniu w zapytaniu API</description>
+            </item>
+            
+            <item>
+            <term>User</term>
+            <description>Zmienna zawierajaca zdeserializowana odpowiedz o uzytkownika z API Twittera</description>
+            </item>
+            
+            <item>
+            <term>Twitts</term>
+            <description>Zmienna zawierajaca zdeserializowana odpowiedz o twitty konkretnego uzytkownika z API Twittera</description>
+            </item>
+            
+            <item>
+            <term>Contex</term>
+            <description>Zmienna przechowywujaca tresc ewentualnego bledu zapytania API ktory w jakis sposob nie zostal obsluzony przez assercie</description>
+            </item>
+            
+            <item>
+            <term>Client</term>
+            <description>Zmienna stanowiaca strone klienta przy obsludze zapytan i odpowiedzi o API Twittera</description>
+            </item>
+            
+            <item>
+            <term>options</term>
+            <description>Zmienna okreslajaca ustawienia deserializera, w tym konkretnym przypasku ignoruje on roznice pomiedzy wielkoscia liter w nazwach zmiennych</description>
+            </item>
+            
+            <item>
+            <term>makeUserUrl</term>
+            <description>Funckja tworzaca prawidlowe url zapytania o dane uzytkowika Twittera na podstawie jego username</description>
+            </item>
+            
+            <item>
+            <term>GetUserID</term>
+            <description>Funkcja obslugujaca zapyanie API Twittera o konkretnego uzytkownika.</description>
+            </item>
+            
+            <item>
+            <term>makeTwittUrl</term>
+            <description>Funckja tworzaca prawidlowe url zapytania o liste 15 ostatnich twittow na podstawie jego Id konretnego uzytkownika</description>
+            </item>
+            
+            <item>
+            <term>GetUserTwitts</term>
+            <description>Funkcja obslugujaca zapyanie API Twittera o konkretnego uzytkownika. </description>
+            </item>
+        </member>
+        <member name="M:Project1.TwitterApiProcessor.makeUserUrl(System.String)">
+            <summary>
+            Funckja tworzaca prawidlowe url zapytania o dane uzytkowika Twittera na podstawie jego username
+            </summary>
+            <param name="_TwitterUserName">string username uzytkownika</param>
+            <returns>string url zapytania API</returns>
+            <example>
+            <code>
+            url = makeUserUrl("POTUS")
+            </code>
+            </example>
+        </member>
+        <member name="M:Project1.TwitterApiProcessor.GetUserID">
+            <summary>
+            Funkcja obslugujaca zapyanie API Twittera o konkretnego uzytkownika. 
+            Funckja nie zwraca bezposrednio zadnej wartosci. 
+            Modyfikuje ona na bierzaco warosci zmiennych klasy
+            </summary>
+        </member>
+        <member name="M:Project1.TwitterApiProcessor.makeTwittUrl(System.String)">
+            <summary>
+            Funckja tworzaca prawidlowe url zapytania o liste 15 ostatnich twittow na podstawie jego Id konretnego uzytkownika
+            </summary>
+            <param name="UserId">Numer identyfikacyjny uzytkownika</param>
+            <returns>string url zapytania API</returns>
+            <example>
+            <code>
+            url = makeTwittUrl(1377428415716950023)
+            </code>
+            </example>
+        </member>
+        <member name="M:Project1.TwitterApiProcessor.GetUserTwitts">
+            <summary>
+            Funckja obslugujaca zapytania do API Twittera o liste ostatnich 15 twittow.  
+            Funckja nie zwraca bezposrednio zadnej wartosci.
+            Modyfukuje wartosci zmiennych w klasie.
+            </summary>
+        </member>
+        <member name="T:Project1.Models.TwitterTwitts">
+            <summary>
+            Klasa wygenerowana automatycznie podstawie formatu json zwracanego rzez API Twitter'a. Zawiera informacje o Twitt'ach.
+            </summary>
+            <item>
+            <term>Data</term>
+            <description>Lista szczegolowych danych o twittcie</description>
+            </item>
+            <item>
+            <term>Meta</term>
+            <description>Meta dane</description>
+            </item>
+        </member>
+        <member name="T:Project1.Models.Meta">
+            <summary>
+            Klasa wygenerowana automatycznie podstawie formatu json zwracanego rzez API Twitter'a. Zawiera Meta dane
+            </summary>
+            <item>
+            <term>Oldest_id</term>
+            <description>Numer identyfikacyjny za pomoca ktorego mozna wysylac zapytania o starszy zbior danych</description>
+            </item>
+            <iterm>
+            <term>Newest_id</term>
+            <description>Numer identyfikacyjny za pomoca ktorego mozna wysylac zapytania o nowszy zbior danych</description>
+            </iterm>
+            <item>
+            <term>Result_count</term>
+            <description>Licznik limitu wykorzystania zapytan API</description>
+            </item>
+            <item>
+            <term>Next_token</term>
+            <description>Nastepny token API</description>
+            </item>
+        </member>
+        <member name="T:Project1.Models.Datum">
+            <summary>
+            Klasa wygenerowana automatycznie podstawie formatu json zwracanego rzez API Twitter'a. Zawiera szczegolowe dane o konkretnych twitt'cie
+            </summary>
+            <item>
+            <term>Created_at</term>
+            <description>Data utworzenia twitta</description>
+            </item>
+            <item>
+            <term>Id</term>
+            <description>Numer identyfikacyjny twitta</description>
+            </item>
+            <item>
+            <term>Possibly_sensitive</term>
+            <description>>Wartosc logiczna informujaca o potencjalnych tresciach wrazliwych o charakterze przemocy lub zbytniego nacechowania sexualnego</description>
+            </item>
+            <item>
+            <term>Text</term>
+            <description>Tresc twitta</description>
+            </item>
+        </member>
+        <member name="T:Project1.Models.TwitterUser">
+            <summary>
+            Klasa wygenerowana automatycznie podstawie formatu json zwracanego rzez API Twitter'a. Zaweira informacje o uzytkowniku i o ewentualnych bledach
+            </summary>
+            <item>
+            <term>Data</term>
+            <description>Szczegolowe informacje o uzytkowniku</description>
+            </item>
+            <item>
+            <term>Errors</term>
+            <description>Tablica informacji o ewentualnych bledach</description>
+            </item>
+        </member>
+        <member name="T:Project1.Models.Data">
+            <summary>
+            Klasa wygenerowana automatycznie podstawie formatu json zwracanego rzez API Twitter'a. Zawiera szczegolowe informacje o uzytkowniku
+            </summary>
+            <item>
+            <term>Id</term>
+            <description>Numer identyfikacyjny uzytkownika</description>
+            </item>
+            <item>
+            <term>Name</term>
+            <description>Imie uzytkownika</description>
+            </item>
+            <item>
+            <term>Username</term>
+            <description>Nazwa uzytkowika</description>
+            </item>
+            <item>
+            <term>Profile_image_url</term>
+            <description>url do obrazu profilowego uzytkownika</description>
+            </item>
+        </member>
+        <member name="T:Project1.Models.Error">
+            <summary>
+            Klasa wygenerowana automatycznie na podstawie formatu json zwracanego przez API Twitter'a. Zawiera szczegolowe informacje o ewentualnych bledach
+            </summary>
+            <item>
+            <term>Detail</term>
+            <description>Szczegoly bledu</description>
+            </item>
+            <item>
+            <term>Title</term>
+            <description>Tytul bledu</description>
+            </item>
+            <item>
+            <term>Resource_type</term>
+            <description>Kategoria bledu</description>
+            </item>
+            <item>
+            <term>Value</term>
+            <description>Tresc bledu</description>
+            </item>
+            <item>
+            <term>Type</term>
+            <description>Typ bledu</description>
+            </item>
+        </member>
+        <member name="T:Project1.Pages.FavouritesModel">
+            <summary>
+            Klasa tworzaca i obslugujaca endnode /Favourites
+            </summary>
+            <item>
+            <term>_context</term>
+            <description>Zmienna do odwolywania sie do bazy danych</description>
+            </item>
+            
+            <item>
+            <term>DBTwitt</term>
+            <description>
+            Zmienna klasy DBTwitt bedaca modelem danych przechowywanych w bazie danych.
+            Przechowuje liste Twittow dodanych do ulubionych
+            </description>
+            </item>
+            
+            <item>
+            <term>TwittToDelete</term>
+            <description>Zmienna obslugujaca forms sluzacy do usuwania danych z bazy danych</description>
+            </item>
+            
+            <item>
+            <term>OnGetAsync</term>
+            <description>Funckja wywolywana asynchronicznie podczas zapytania GET na endpode /Favourites</description>
+            </item>
+            
+            <item>
+            <term>OnPostRemoveAsync</term>
+            <description>Funckja wywolywana asynchronicznie po nacisnieciu przycisku REMOVE</description>
+            </item>
+        </member>
+        <member name="M:Project1.Pages.FavouritesModel.OnGetAsync">
+            <summary>
+            Funckja wywolywana asynchronicznie podczas zapytania GET na endpode /Favourites.
+            Nadaje wartosc zmiennej DBTwitt niezbednej do wyswietlenia listy.
+            </summary>
+        </member>
+        <member name="M:Project1.Pages.FavouritesModel.OnPostRemoveAsync">
+            <summary>
+            Funckja wywolywana asynchronicznie po nacisnieciu przycisku REMOVE.
+            </summary>
+            <returns>
+            Odswieza aktualnie wyswietlana strone
+            </returns>
+        </member>
+        <member name="T:Project1.Pages.IndexModel">
+            <summary>
+            Klasa tworzaca i obslugujaca endnode /Index
+            </summary>
+            <item>
+            <term>_logger</term>
+            <description>Zmienna wykorzystywana w celu debugowania</description>
+            </item>
+            <item>
+            <term>TwitterUserName</term>
+            <description>Zmienna obslugujaca forms.
+            Cechuje sie tym, ze jest wymagana, aby wykonac operacje submit na stronie,
+            jak rowniez tym, ze przyjmuje wylacznie wartosci A-Z,a-z,0-9
+            </description>
+            </item>
+            <item>
+            <term>OnPost</term>
+            <description>Funckja wywolywana gdy zostanie wykonana akcja submit na stronie.</description>
+            </item>
+        </member>
+        <member name="M:Project1.Pages.IndexModel.OnPost">
+            <summary>
+            Funckja wywolywana gdy zostanie wykonana akcja submit na stronie. 
+            </summary>
+            <returns>
+            W przypadku poprawnego wypelnienia formsa, przenoszonym zostaje sie do endnodu /List
+            W przypadku porazki, strona jest odswiezana.
+            </returns>
+        </member>
+    </members>
+</doc>

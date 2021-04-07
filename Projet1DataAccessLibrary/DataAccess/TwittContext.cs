@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Projet1DataAccessLibrary.DataAccess
 {
+    /// <summary>
+    /// Klasa oblugujaca baze danych w Enity Framework
+    /// </summary>
     public class TwittContext: DbContext
     {
         public TwittContext(DbContextOptions options) : base(options) { }

@@ -13,6 +13,24 @@ using System.Threading.Tasks;
 
 namespace Project1.Pages
 {
+    /// <summary>
+    /// Klasa tworzaca i obslugujaca endnode /Index
+    /// </summary>
+    /// <item>
+    /// <term>_logger</term>
+    /// <description>Zmienna wykorzystywana w celu debugowania</description>
+    /// </item>
+    /// <item>
+    /// <term>TwitterUserName</term>
+    /// <description>Zmienna obslugujaca forms.
+    /// Cechuje sie tym, ze jest wymagana, aby wykonac operacje submit na stronie,
+    /// jak rowniez tym, ze przyjmuje wylacznie wartosci A-Z,a-z,0-9
+    /// </description>
+    /// </item>
+    /// <item>
+    /// <term>OnPost</term>
+    /// <description>Funckja wywolywana gdy zostanie wykonana akcja submit na stronie.</description>
+    /// </item>
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
@@ -32,6 +50,14 @@ namespace Project1.Pages
         {
 
         }
+
+        /// <summary>
+        /// Funckja wywolywana gdy zostanie wykonana akcja submit na stronie. 
+        /// </summary>
+        /// <returns>
+        /// W przypadku poprawnego wypelnienia formsa, przenoszonym zostaje sie do endnodu /List
+        /// W przypadku porazki, strona jest odswiezana.
+        /// </returns>
         public IActionResult OnPost()
         {
             if (ModelState.IsValid == false)

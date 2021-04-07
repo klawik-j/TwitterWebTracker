@@ -9,15 +9,64 @@ using System.Text.Json;
 
 namespace Project1Tests
 {
+    /// <summary>
+    /// Klasa zawierajaca testy jednostkowe.
+    /// </summary>
+    /// 
+    /// <item>
+    /// <term>ValidUserUrl</term>
+    /// <description>Funckja testujaca funckje TwitterApiProcessor.makeUserUrl(UserName) w przypadku prawidlowych wartosci</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>InvalidUserUrl</term>
+    /// <description>Funckja testujaca funckje TwitterApiProcessor.makeUserUrl(UserName) w przypadku nieprawidlowych wartosci</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>ValidTwittUrl</term>
+    /// <description>Funckja testujaca funckje TwitterApiProcessor.makeTwittUrl(UserId) w przypadku prawidlowych wartosci</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>InvalidTwittUrl</term>
+    /// <description>Funckja testujaca funckje TwitterApiProcessor.makeTwittUrl(UserId) w przypadku nieprawidlowch wartosci</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>UserExistTwitterUserSerializer</term>
+    /// <description>Funckja testujaca dzialanie serializera w przypadku uzytkownika ktory istnieje i ktorego dane udalo sie odebrac zapytaniem</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>UserDoesNotExistTwitterUserSerializerTest</term>
+    /// <description>Funckja testujaca dzialanie serializera w przypadku uzytkownika ktory nie istnieje i ktorego dane udalo sie odebrac zapytaniem</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>UserHasTwittsTwitterTwittSerializerTest</term>
+    /// <description>Funckja testujaca dzialanie serializera w przypadku danych gdzie uzytkownik posiada twitty</description>
+    /// </item>
+    /// 
+    /// <item>
+    /// <term>UserHasNoTwittsTwitterTwittSerializerTest</term>
+    /// <description>Funckja testujaca dzialanie serializera w przypadku danych gdzie uzytkownik nie posiada twittow</description>
+    /// </item>
     public class UnitTest1
     {
-        private readonly int _param1;
 
         public UnitTest1()
         {
-            _param1 = 1;
         }
 
+        /// <summary>
+        /// Funckja testujaca funckje TwitterApiProcessor.makeUserUrl(UserName) w przypadku prawidlowych wartosci.
+        /// Testy poleagaja na podaniu jako argument wywolania 3 setow wartosci bedach username istniejacych uzytkownikow.
+        /// Wartoscia oczekiwana jest sztywno napisany url w spodob w ktory zawsze bedzie prawidlowy
+        /// wartoscia podlegajaca testowi jest url bedacy wnikiem testowanej funkcji
+        /// Porownywana jest ich rownosc
+        /// </summary>
+        /// <param name="UserName">strgin nazwa uzytkownika</param>
         [Theory]
         [InlineData("POTUS")]
         [InlineData("AndrzejDuda")]
@@ -29,6 +78,11 @@ namespace Project1Tests
             Assert.Equal(expecting, result);
         }
 
+        /// <summary>
+        /// Funckja testujaca funckje TwitterApiProcessor.makeUserUrl(UserName) w przypadku nieprawidlowych wartosci.
+        /// Wartoscia nieprawidlowa jest " ", ktory nie moze byc przyjmowany jako nazwa uzytkownika wedlug dokumentacji API Twittera
+        /// Testowane jest zwrocenie ArgumentException w skutek dzialania testowanej funkcji
+        /// </summary>
         [Fact]
         public void InvalidUserUrl()
         {
@@ -36,6 +90,14 @@ namespace Project1Tests
             Assert.Throws<ArgumentException>(() => TwitterApiProcessor.makeUserUrl(InvalidUserName));
         }
 
+        /// <summary>
+        /// Funckja testujaca funckje TwitterApiProcessor.makeTwittUrl(UserId) w przypadku prawidlowych wartosci.
+        /// Do testow sa dostarczane 3 numery identyfikacyjne, faktycznych uzytkownikow Twittera.
+        /// Wartoscia oczekiwana jest url skonstruowany w sposob gwarantujacy jego poprawnosc
+        /// Wartoscia podlegajaca testowi jest wynik dzialania testowanej funkji.
+        /// Porownywane jest ich rownosc.
+        /// </summary>
+        /// <param name="UserId">string numer identyfikacyjny uzytkownika</param>
         [Theory]
         [InlineData("1349149096909668363")]
         [InlineData("202086424")]
@@ -47,6 +109,11 @@ namespace Project1Tests
             Assert.Equal(expecting, result);
         }
 
+        /// <summary>
+        /// Funckja testujaca funckje TwitterApiProcessor.makeTwittUrl(UserId) w przypadku nieprawidlowch wartosci.
+        /// Wartoscia nieprawidlowa jest " " ktore nie jest poprawnym numerm identyfikacyjnym wedlug dokumentaji API Twittera
+        /// Testowane jest zwrocenie ArgumentException w skutek dzialania testowanej funkcji
+        /// </summary>
         [Fact]
         public void InvalidTwittUrl()
         {
@@ -54,8 +121,13 @@ namespace Project1Tests
             Assert.Throws<ArgumentException>(() => TwitterApiProcessor.makeTwittUrl(InvalidUserId));
         }
 
+        /// <summary>
+        /// Funckja testujaca dzialanie serializera w przypadku uzytkownika ktory istnieje i ktorego dane udalo sie odebrac zapytaniem.
+        /// Zbiorem danych w postaci string data jest poprawnie odebrane zapytanie, zawierajace dane istniejacego uzytkownika.
+        /// Test polega na wywolaniu serializera i skontrolowaniu czy nefralgiczne dane zostaly prawidlowo przypisane do klasy.
+        /// </summary>
         [Fact]
-        public void UserExistNoErrorTwitterUserSerializer()
+        public void UserExistTwitterUserSerializer()
         {
             JsonSerializerOptions options = new JsonSerializerOptions
             {
@@ -68,6 +140,11 @@ namespace Project1Tests
             Assert.NotNull(User.Data.Id);
         }
 
+        /// <summary>
+        /// Funckja testujaca dzialanie serializera w przypadku uzytkownika ktory nie istnieje i ktorego dane udalo sie odebrac zapytaniem.
+        /// Zbiorem danych w postaci string data jest poprawnie odebrane zapytanie zawierajace informacje o tym ze uzytkownik o podanym username nie istnieje.
+        /// Test polega na wywolaniu serializera i skontrolowaniu czy nefralgiczne dane zostaly prawidlowo przypisane do klasy
+        /// </summary>
         [Fact]
         public void UserDoesNotExistTwitterUserSerializerTest()
         {
@@ -79,7 +156,12 @@ namespace Project1Tests
             TwitterUser User = JsonSerializer.Deserialize<TwitterUser>(data, options);
             Assert.NotEmpty(User.Errors);
         }
-        
+
+        /// <summary>
+        /// Funckja testujaca dzialanie serializera w przypadku danych gdzie uzytkownik posiada twitty.
+        /// Zbiorem danych w postaci string data jest poprawnie odebrane zapytanie zawierajace informacje o tym ze uzytkownik ma na koncie jakies opublikowane twitty
+        /// Test polega na wywolaniu serializera i skontrowlowaniu czy nefralgiczne dane zostaly prawidlowo przypisane do klasy.
+        /// </summary>
         [Fact]
         public void UserHasTwittsTwitterTwittSerializerTest()
         {
@@ -92,6 +174,11 @@ namespace Project1Tests
             Assert.NotEmpty(Twitt.Data);
         }
 
+        /// <summary>
+        /// Funckja testujaca dzialanie serializera w przypadku danych gdzie uzytkownik nie posiada twittow.
+        /// Zbiorem danych w postaci string data jest poprawnie odebrane zapytanie zawierajace informacje o tym ze uzytkownik nie opublikowal dotad zadnych twittow
+        /// Test polega na wywolaniu serializera i skontrolowaniu czy nefralgiczne dane zostaly prawidlowo przypisane do klasy
+        /// </summary>
         [Fact]
         public void UserHasNoTwittsTwitterTwittSerializerTest()
         {
